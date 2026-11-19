@@ -1,0 +1,33 @@
+# Data produksi, backup, dan snapshot — tidak boleh masuk repository
+data/
+recovery/
+snapshots/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.bak
+
+# Hasil build, paket rilis, dan berkas kerja sementara
+release/
+outputs/
+work/
+tmp/
+runtime/
+*.zip
+
+# Log server
+*.log
+
+# Ekspor/impor data operasional
+*.xlsx
+*.xls
+*.csv
+
+# Lingkungan lokal
+.env
+.env.*
+node_modules/
+__pycache__/
+*.pyc

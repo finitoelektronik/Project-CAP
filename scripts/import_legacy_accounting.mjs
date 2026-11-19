@@ -1,0 +1,41 @@
+// One-time, non-destructive importer from the attached legacy SQL Server database.
+// Usage: node scripts/import_legacy_accounting.mjs [server] [database]
+import { spawnSync } from 'node:child_process';
+import { join } from 'node:path';
+import { DatabaseSync } from 'node:sqlite';
+
+const ROOT=process.cwd(),server=process.argv[2]||'(local)',database=process.argv[3]||'CAP_Accounting_Legacy_Import',target=join(ROOT,'data','app.db');
+const sqlcmd='C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\SQLCMD.EXE';
+const runSql=query=>{const result=spawnSync(sqlcmd,['-S',server,'-d',database,'-E','-y','0','-w','65535','-Q',`SET NOCOUNT ON; ${query}`],{encoding:'utf8',maxBuffer:64*1024*1024,timeout:180000});if(result.error)throw result.error;if(result.status!==0)throw new Error(result.stderr||result.stdout||'sqlcmd gagal membaca database lama.');const raw=String(result.stdout||'').replace(/\r?\n/g,'').trim();return raw?JSON.parse(raw):[];};
+const dateExpr=column=>`CASE WHEN ${column} IS NULL THEN '' ELSE CONVERT(varchar(33),${column},126) END`;
+const data={
+  accounts:runSql(`SELECT noRek account_code,nama account_name,tingkat level_name,induk parent_code,status account_status,keterangan description,tipe account_type,subtipe account_subtype,kelompok is_group,lawanRek counter_account_code,userID legacy_user_id,${dateExpr('tanggal')} legacy_date FROM dbo.Rekening FOR JSON PATH, INCLUDE_NULL_VALUES`),
+  journals:runSql(`SELECT noBukti voucher_number,uraian description,jumlah amount,${dateExpr('tanggal')} transaction_date,jenis transaction_type,userID legacy_user_id FROM dbo.Transaksi FOR JSON PATH, INCLUDE_NULL_VALUES`),
+  lines:runSql(`SELECT id legacy_line_id,noBukti voucher_number,Keterangan description,noRek account_code,debet,kredit,${dateExpr('waktu')} legacy_timestamp FROM dbo.DetailTransaksi FOR JSON PATH, INCLUDE_NULL_VALUES`),
+  items:runSql(`SELECT kode item_code,nama item_name,JenisBarang item_type,KodeDebetPenjualan debit_sales_code,KodeKreditPenjualan credit_sales_code,KodeDebetPembelian debit_purchase_code,KodeKreditPembelian credit_purchase_code,Keterangan description FROM dbo.Barang FOR JSON PATH, INCLUDE_NULL_VALUES`),
+  suppliers:runSql(`SELECT kode supplier_code,nama supplier_name,alamat address,asal origin,keterangan description FROM dbo.Supplier FOR JSON PATH, INCLUDE_NULL_VALUES`),
+  inventory:runSql(`SELECT noBukti voucher_number,BC23 bc23,noContainer container_number,${dateExpr('Tanggal')} transaction_date,KodeSupplier supplier_code,kursTipe exchange_type,kursValue exchange_value,beaMasuk import_duty,totalAmount total_amount,totalPembelian total_purchase,tipeTransaksi transaction_type,keterangan description FROM dbo.TransaksiBarang FOR JSON PATH, INCLUDE_NULL_VALUES`),
+  inventoryLines:runSql(`SELECT id,noBukti voucher_number,kodeBarang item_code,jumlah quantity,hargaSatuan unit_price,total,kursTipe exchange_type,kursValue exchange_value FROM dbo.DetailTransaksiBarang FOR JSON PATH, INCLUDE_NULL_VALUES`)
+};
+const text=value=>String(value??''),number=value=>Number(value??0)||0,date=value=>text(value).slice(0,10);
+const db=new DatabaseSync(target);
+if(db.prepare("SELECT 1 FROM accounting_import_audits WHERE source_name='akuntansi.mdf' LIMIT 1").get())throw new Error('Impor akuntansi lama sudah pernah dilakukan. Tidak ada data yang diubah.');
+const expectedDebit=data.lines.reduce((sum,row)=>sum+number(row.debet),0),expectedCredit=data.lines.reduce((sum,row)=>sum+number(row.kredit),0);
+if(Math.abs(expectedDebit-expectedCredit)>=0.01)throw new Error(`Database lama tidak seimbang; impor dibatalkan (debit ${expectedDebit}, kredit ${expectedCredit}).`);
+db.exec('BEGIN IMMEDIATE');
+try{
+  const account=db.prepare(`INSERT INTO accounting_accounts (account_code,account_name,level_name,parent_code,account_status,description,account_type,account_subtype,is_group,counter_account_code,legacy_user_id,legacy_date,source) VALUES (?,?,?,?,?,?,?,?,?,?,?,?, 'legacy')`);
+  for(const row of data.accounts)account.run(text(row.account_code),text(row.account_name),text(row.level_name),text(row.parent_code),text(row.account_status),text(row.description),text(row.account_type),text(row.account_subtype),number(row.is_group)?1:0,text(row.counter_account_code),text(row.legacy_user_id),text(row.legacy_date));
+  const journal=db.prepare(`INSERT INTO accounting_journal_entries (voucher_number,transaction_date,description,amount,transaction_type,legacy_user_id,source) VALUES (?,?,?,?,?,?, 'legacy')`),journalIds=new Map();
+  for(const row of data.journals){const result=journal.run(text(row.voucher_number),date(row.transaction_date),text(row.description),number(row.amount),text(row.transaction_type),text(row.legacy_user_id));journalIds.set(text(row.voucher_number),Number(result.lastInsertRowid));}
+  const line=db.prepare('INSERT INTO accounting_journal_lines (journal_id,account_code,description,debit,credit,legacy_line_id,legacy_timestamp) VALUES (?,?,?,?,?,?,?)');
+  for(const row of data.lines){const journalId=journalIds.get(text(row.voucher_number));if(!journalId)throw new Error(`Detail jurnal tanpa header: ${text(row.voucher_number)}`);line.run(journalId,text(row.account_code),text(row.description),number(row.debet),number(row.kredit),Number(row.legacy_line_id),text(row.legacy_timestamp));}
+  const item=db.prepare('INSERT INTO accounting_legacy_items (item_code,item_name,item_type,debit_sales_code,credit_sales_code,debit_purchase_code,credit_purchase_code,description) VALUES (?,?,?,?,?,?,?,?)');for(const row of data.items)item.run(text(row.item_code),text(row.item_name),text(row.item_type),text(row.debit_sales_code),text(row.credit_sales_code),text(row.debit_purchase_code),text(row.credit_purchase_code),text(row.description));
+  const supplier=db.prepare('INSERT INTO accounting_legacy_suppliers (supplier_code,supplier_name,address,origin,description) VALUES (?,?,?,?,?)');for(const row of data.suppliers)supplier.run(text(row.supplier_code),text(row.supplier_name),text(row.address),text(row.origin),text(row.description));
+  const inventory=db.prepare('INSERT INTO accounting_legacy_inventory_transactions (voucher_number,bc23,container_number,transaction_date,supplier_code,exchange_type,exchange_value,import_duty,total_amount,total_purchase,transaction_type,description) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)');for(const row of data.inventory)inventory.run(text(row.voucher_number),text(row.bc23),text(row.container_number),date(row.transaction_date),text(row.supplier_code),text(row.exchange_type),number(row.exchange_value),number(row.import_duty),number(row.total_amount),number(row.total_purchase),row.transaction_type===null?null:Number(row.transaction_type),text(row.description));
+  const inventoryLine=db.prepare('INSERT INTO accounting_legacy_inventory_lines (legacy_line_id,voucher_number,item_code,quantity,unit_price,total,exchange_type,exchange_value) VALUES (?,?,?,?,?,?,?,?)');for(const row of data.inventoryLines)inventoryLine.run(Number(row.id),text(row.voucher_number),text(row.item_code),number(row.quantity),number(row.unit_price),number(row.total),text(row.exchange_type),number(row.exchange_value));
+  const totals=db.prepare('SELECT coalesce(SUM(debit),0) debit,coalesce(SUM(credit),0) credit,COUNT(*) lines FROM accounting_journal_lines').get();
+  if(Math.abs(Number(totals.debit)-expectedDebit)>=0.01||Math.abs(Number(totals.credit)-expectedCredit)>=0.01)throw new Error('Rekonsiliasi nominal gagal; impor dibatalkan.');
+  db.prepare("INSERT INTO accounting_import_audits (source_name,account_count,journal_count,journal_line_count,total_debit,total_credit,notes) VALUES ('akuntansi.mdf',?,?,?,?,?,?)").run(data.accounts.length,data.journals.length,data.lines.length,expectedDebit,expectedCredit,'Migrasi SQL Server legacy; kode rekening dan nomor bukti dipertahankan. Tabel Pengguna lama tidak diimpor untuk melindungi kredensial lama.');
+  db.exec('COMMIT');console.log(JSON.stringify({ok:true,accounts:data.accounts.length,journals:data.journals.length,lines:data.lines.length,debit:expectedDebit,credit:expectedCredit,items:data.items.length,suppliers:data.suppliers.length,inventory:data.inventory.length,inventory_lines:data.inventoryLines.length}));
+}catch(error){try{db.exec('ROLLBACK');}catch{}throw error;}finally{db.close();}

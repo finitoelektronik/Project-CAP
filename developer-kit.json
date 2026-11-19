@@ -1,0 +1,48 @@
+{
+  "format": "cap-developer-kit/v1",
+  "application": "CAP Analytics",
+  "language": "id-ID",
+  "runtime": {
+    "node_entry": "app.mjs",
+    "database": "data/app.db",
+    "local_url": "http://localhost:3100",
+    "module_format": "cap-module/v1"
+  },
+  "source_of_truth": [
+    "CONTEXT.md",
+    "DEVELOPER_AUTONOMY.md",
+    "MODULE_PACKAGE_SPEC.md"
+  ],
+  "protected_paths": [
+    "data/",
+    "startup.log",
+    "startup-error.log",
+    "recovery/",
+    "snapshots/"
+  ],
+  "release_policy": {
+    "package_only_on_explicit_request": true,
+    "database_payload_forbidden": true,
+    "destructive_migrations_forbidden": true,
+    "required_validation": [
+      "node --check app.mjs",
+      "python scripts/cap_module_package.py inspect <paket.zip>"
+    ]
+  },
+  "decision_policy": {
+    "developer_can_do": [
+      "bug_fix",
+      "security_fix",
+      "responsive_ui_fix",
+      "non_destructive_schema_extension",
+      "new_module_or_submodule"
+    ],
+    "owner_approval_required": [
+      "data_or_schema_deletion",
+      "payroll_or_finance_rule_change",
+      "external_data_service",
+      "authentication_or_master_access_change",
+      "material_operational_workflow_change"
+    ]
+  }
+}

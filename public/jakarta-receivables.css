@@ -1,0 +1,61 @@
+#jakartaView{padding-bottom:48px}
+#jakartaView header{align-items:flex-start;gap:18px}
+#jakartaView .header-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
+#jakartaView .header-actions .button{white-space:nowrap}
+.jr-filter-panel{padding:24px 26px;margin:0 0 20px;background:linear-gradient(135deg,#fff,#f8faff)}
+.jr-filter-heading{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:17px}
+.jr-filter-heading h2{font-size:18px}
+.jr-filter-heading p{margin-top:5px;color:var(--muted);font-size:13px}
+.jr-filter-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:13px;align-items:end}
+.jr-filter-grid label{margin:0;font-size:12px}
+.jr-filter-grid select{min-height:42px}
+.jr-filter-action{padding-bottom:0}
+.jr-filter-action .button{min-height:42px;padding-inline:21px}
+.jr-empty-state{border:1px dashed #ccd8eb;border-radius:10px;padding:20px;color:#64748b;background:#fbfcff;font-size:13px}
+#jakartaView .stats{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:20px 0}
+#jakartaView .stat-card{min-height:98px;padding:18px;display:block}
+#jakartaView .stat-card span{display:block;color:#617089;font-size:12px;line-height:1.35;min-height:31px}
+#jakartaView .stat-card strong{font-size:20px;line-height:1.2;white-space:nowrap}
+#jakartaView .table-panel{padding:24px}
+#jakartaView .table-wrap{max-height:540px}
+#jakartaView .jr-table-tools{display:flex;align-items:end;justify-content:flex-end;gap:10px}
+#jakartaView .jr-invoice-search{display:block;margin:0;color:#687891;font-size:11px;font-weight:700}
+#jakartaView .jr-invoice-search input{display:block;width:190px;min-height:36px;margin-top:4px;border:1px solid #d5dfed;border-radius:7px;padding:7px 10px;font:inherit;font-size:12px;color:#1d3150}
+#jakartaView tr[style*="fff700"] td{background:#fffbd3}
+#jakartaView .text-button{border:1px solid #dbe4f3;border-radius:6px;background:#fff;color:#315baf;padding:5px 8px;font:inherit;font-size:11px;font-weight:700;cursor:pointer}
+#jakartaView .text-button.danger{color:#bd3d4d;border-color:#f1c9cf}
+.modal{width:min(920px,calc(100vw - 32px));max-width:920px;max-height:calc(100vh - 32px);overflow:hidden}
+.modal .dialog-card{width:100%;max-width:none;max-height:calc(100vh - 32px);overflow:auto;padding:28px}
+.modal .dialog-card h2{font-size:22px;margin-bottom:3px}
+.modal .dialog-card h3{font-size:15px;margin:24px 0 9px}
+.modal .dialog-card label{margin:0 0 14px}
+.modal .dialog-card input,.modal .dialog-card select,.modal .dialog-card textarea{min-height:42px;border-color:#d5dfed}
+.modal .dialog-card textarea{min-height:88px}
+.modal .dialog-card .form-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+.modal .dialog-card input,.modal .dialog-card select,.modal .dialog-card textarea{width:100%;min-width:0}
+.jr-filter-grid label:has(.jr-store-input),.modal .dialog-card label:has(.jr-store-input){position:relative}
+.jr-store-menu{position:absolute;z-index:50;top:calc(100% - 14px);left:0;right:0;max-height:min(240px,36vh);overflow-y:auto;border:1px solid #cbd8eb;border-radius:8px;background:#fff;box-shadow:0 12px 28px rgba(27,48,83,.18);padding:5px}
+.jr-store-menu[hidden]{display:none}
+.jr-store-option{display:block;width:100%;border:0;border-radius:5px;background:transparent;color:#1c3150;padding:9px 10px;text-align:left;font:inherit;font-size:13px;cursor:pointer}
+.jr-store-option:hover,.jr-store-option.is-active{background:#e9f0ff;color:#1c5bd8}
+.jr-store-empty{display:block;padding:10px;color:#718096;font-size:12px}
+.modal .dialog-card .jr-item,.modal .dialog-card .jr-payment-allocation,.modal .dialog-card .jr-term-store,.modal .dialog-card .jr-class-store{padding:13px;margin-bottom:9px;border:1px solid #e5eaf2;border-radius:9px;background:#fbfcff;align-items:end}
+.modal .dialog-card .jr-item{grid-template-columns:minmax(0,1.7fr) minmax(110px,.6fr) minmax(150px,.8fr) auto}
+.modal .dialog-card .jr-payment-allocation{grid-template-columns:minmax(0,1.6fr) minmax(150px,.7fr) auto}
+.modal .dialog-card .jr-term-store{grid-template-columns:minmax(0,1.3fr) minmax(130px,.55fr) auto}
+.modal .dialog-card .jr-class-store{grid-template-columns:minmax(0,1fr) auto}
+.modal .dialog-card .jr-item label,.modal .dialog-card .jr-payment-allocation label,.modal .dialog-card .jr-term-store label,.modal .dialog-card .jr-class-store label{margin:0}
+.modal .dialog-card .text-button{border:1px solid #d7e2f2;border-radius:7px;background:#fff;color:#315baf;padding:9px 11px;font:inherit;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer}
+.modal .dialog-card .text-button.danger{color:#bd3d4d;border-color:#f0c6cc}
+.modal .dialog-card .panel{padding:16px;margin-top:10px;background:#fbfcff}
+.modal .dialog-card .jr-store-list{display:flex;flex-wrap:wrap;gap:8px;max-height:160px;overflow:auto;padding:12px;border:1px solid #e5eaf2;border-radius:9px;background:#fbfcff}
+.modal .dialog-card .jr-store-list span{padding:6px 9px;border-radius:999px;background:#eaf0ff;color:#315baf;font-size:12px;font-weight:650}
+.modal .dialog-card .jr-payment-history{display:grid;gap:8px}
+.modal .dialog-card .jr-payment-history>div{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px;border:1px solid #e5eaf2;border-radius:9px;background:#fbfcff}
+.modal .dialog-card .jr-payment-history strong,.modal .dialog-card .jr-payment-history small{display:block}
+.modal .dialog-card .jr-payment-history small{margin-top:3px;color:#748196;max-width:430px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.modal .dialog-card .jr-payment-history>div>span:last-child{display:flex;gap:6px}
+.modal .dialog-card .panel .dialog-actions{position:static;border:0;background:transparent;padding:10px 0 0;margin:0;justify-content:flex-start}
+.modal .dialog-card .dialog-actions{position:sticky;bottom:-28px;background:#fff;padding:14px 0 0;margin-top:20px;border-top:1px solid #edf0f5}
+@media(max-width:1180px){#jakartaView .stats{grid-template-columns:repeat(3,minmax(0,1fr))}.jr-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){#jakartaView header{display:block}#jakartaView .header-actions{justify-content:flex-start;margin-top:16px}.jr-filter-panel,#jakartaView .table-panel{padding:18px}.jr-filter-grid,#jakartaView .stats{grid-template-columns:1fr}.jr-filter-action .button{width:100%}#jakartaView .table-panel .panel-heading{display:block}#jakartaView .jr-table-tools{justify-content:space-between;margin-top:12px}#jakartaView .jr-invoice-search input{width:min(220px,66vw)}.modal{width:calc(100vw - 20px);max-height:calc(100vh - 20px)}.modal .dialog-card{padding:21px;max-height:calc(100vh - 20px)}.modal .dialog-card .dialog-actions{bottom:-21px}.modal .dialog-card .jr-item,.modal .dialog-card .jr-payment-allocation,.modal .dialog-card .jr-term-store,.modal .dialog-card .jr-class-store{grid-template-columns:1fr}.modal .dialog-card .text-button{width:100%}.modal .dialog-card .jr-payment-history>div{display:block}.modal .dialog-card .jr-payment-history>div>span:last-child{margin-top:10px}.modal .dialog-card .jr-payment-history small{white-space:normal}.jr-store-menu{max-height:190px}}

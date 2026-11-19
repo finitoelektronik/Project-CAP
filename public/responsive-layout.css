@@ -1,0 +1,51 @@
+/* Desktop fluid layout: at 75% browser zoom the application uses the full
+   available workspace instead of stopping at the former 1500px content cap. */
+html { min-width: 320px; }
+
+body { overflow-x: hidden; }
+
+main,
+.dashboard-active main {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin-right: 0 !important;
+  padding: clamp(28px, 2.5vw, 56px) clamp(28px, 3.2vw, 64px) !important;
+}
+
+main > .view,
+.accounting-lite,
+.panel,
+.content-grid,
+.table-panel {
+  min-width: 0;
+}
+
+.accounting-lite {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+.sidebar-hidden main,
+.sidebar-hidden.dashboard-active main {
+  margin-left: 0 !important;
+}
+
+/* Wide records scroll inside their own table; the page itself never widens. */
+.table-wrap,
+.al-table-wrap {
+  max-width: 100%;
+  overscroll-behavior: contain;
+}
+
+@media (max-width: 800px) {
+  main,
+  .dashboard-active main {
+    padding: 24px 17px !important;
+  }
+
+  .accounting-lite {
+    padding: 15px !important;
+  }
+}
