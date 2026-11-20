@@ -40,6 +40,12 @@ _Avoid_: membuat baris nominal nol, melunasi hutang supplier secara otomatis pad
 Perhitungan laporan HPP dilakukan sesudah pengguna menekan Terapkan melalui agregasi rekening dan snapshot persediaan periode yang diperlukan; seluruh kartu stok per barang tidak dimuat ke layar.
 _Avoid_: memuat seluruh kartu stok sebagai prasyarat laporan, menghitung sebelum periode diterapkan.
 
+## Notifikasi WhatsApp
+
+**Klasifikasi Nomor WhatsApp**:
+Kelompok nomor penerima (mis. Internal, Supplier, Pelanggan) yang dikelola akun master. Satu nomor memiliki paling banyak satu klasifikasi dan tetap dapat menerima notifikasi dari beberapa modul. Pengiriman notifikasi dapat dibatasi pada satu klasifikasi; tanpa pilihan klasifikasi, semua kontak aktif pada modul tersebut menerima pesan. Klasifikasi yang masih dipakai tidak dapat dihapus, hanya dinonaktifkan.
+_Avoid_: menghapus kontak saat klasifikasinya dihapus, menyimpan klasifikasi sebagai teks bebas pada kontak.
+
 ## Language
 
 **Kontrak Sinosure**:
