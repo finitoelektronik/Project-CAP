@@ -31,3 +31,7 @@ runtime/
 node_modules/
 __pycache__/
 *.pyc
+
+# Kunci modul per sesi Claude Code (lokal per komputer)
+.claude/cap-locks/
+.claude/settings.local.json

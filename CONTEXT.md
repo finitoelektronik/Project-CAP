@@ -40,6 +40,20 @@ _Avoid_: membuat baris nominal nol, melunasi hutang supplier secara otomatis pad
 Perhitungan laporan HPP dilakukan sesudah pengguna menekan Terapkan melalui agregasi rekening dan snapshot persediaan periode yang diperlukan; seluruh kartu stok per barang tidak dimuat ke layar.
 _Avoid_: memuat seluruh kartu stok sebagai prasyarat laporan, menghitung sebelum periode diterapkan.
 
+## Kepemilikan Data Modul
+
+**Wilayah Modul**:
+Setiap modul memiliki tabel, berkas, dan pengaturannya sendiri (daftar di `cap-modules.json`). Hanya modul pemilik yang boleh menulis datanya; modul lain hanya membaca.
+_Avoid_: modul yang menambah, mengubah, atau menghapus data modul lain secara langsung.
+
+**WhatsApp sebagai Layanan Bersama**:
+WhatsApp Business menyimpan semua log pesan dari modul mana pun yang memiliki fungsi pengingat. Modul lain meminta WhatsApp mengirim pesan melalui layanan WhatsApp; log tetap milik WhatsApp.
+_Avoid_: modul yang menulis tabel WhatsApp secara langsung atau menyimpan log pesan di tabelnya sendiri.
+
+**Pembayaran Gaji dan Kas Kecil**:
+Log pembayaran gaji (Gaji gudang) tidak lagi membuat atau mengubah transaksi Kas Kecil. Pembayaran gaji dicatat di Kas Kecil oleh modul Keuangan; transaksi Kas Kecil yang dahulu dibuat otomatis tetap tersimpan.
+_Avoid_: Gaji gudang menulis ke `petty_cash_transactions`.
+
 ## Retur Online
 
 **Input Resi Retur Manual**:

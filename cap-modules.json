@@ -1,0 +1,28 @@
+{
+  "format": "cap-module-ownership/v1",
+  "description": "Daftar modul CAP Analytics dan berkas yang menjadi wilayah masing-masing. Dipakai oleh penjaga sesi (scripts/claude/cap-module-guard.ps1). Berkas yang tidak cocok dengan modul mana pun dianggap milik inti.",
+  "shared_temporary": {
+    "note": "Berkas bersama sementara sampai app.mjs dan public/app.js dipecah ke modules/. Sesi modul boleh mengedit, tetapi HANYA bagian milik modulnya sendiri.",
+    "files": ["app.mjs", "public/app.js", "CONTEXT.md"]
+  },
+  "modules": [
+    {
+      "id": "inti",
+      "label": "Inti aplikasi (core)",
+      "description": "Server/router, login/akun/hak akses, registri & pemuat modul, Pemasang Modul, snapshot/pemulihan, dashboard/sidebar, identitas aplikasi, komponen UI bersama, dokumentasi & alat pengembang.",
+      "files": ["core/*", "modules/README.md", "modules/_template/*", "public/index.html", "public/styles.css", "public/responsive-layout.css", "public/core/*", "installer/*", "templates/*", "docs/*", "scripts/claude/*", "scripts/cap_*", "scripts/build_core_*", "scripts/build-windows-exe.ps1", "scripts/Restart-*", "scripts/Install-CAP-*", "scripts/build_excel_runtime_repair.py", "scripts/export_developer_kit.py", "scripts/export_cap_data_sql.py", "CLAUDE.md", "DEVELOPER_AUTONOMY.md", "MODULE_PACKAGE_SPEC.md", "CODEX_MODULE_DEVELOPER_KIT.md", "AI_MODULE_OPERATIONS.md", "README.md", "PANDUAN_INSTALASI.md", "developer-kit.json", "cap-modules.json", ".claude/*", ".gitignore", "*.ps1", "*.cmd"]
+    },
+    { "id": "returns", "label": "Retur Online", "files": ["modules/returns/*", "public/modules/returns/*", "public/returns-manual.js", "scripts/extract_sales_excel.py", "scripts/build_returns_*"] },
+    { "id": "warehouse", "label": "Rekap kegiatan gudang", "files": ["modules/warehouse/*", "public/modules/warehouse/*"] },
+    { "id": "payroll", "label": "Gaji gudang", "files": ["modules/payroll/*", "public/modules/payroll/*", "scripts/*payroll*", "scripts/export_attendance_log_excel.py"] },
+    { "id": "online_shop", "label": "Resi Online Shop", "files": ["modules/online_shop/*", "public/modules/online_shop/*", "scripts/*online_shop*"] },
+    { "id": "finance", "label": "Keuangan (Kas Kecil, Biaya Perusahaan, Stok Kantor)", "files": ["modules/finance/*", "public/modules/finance/*", "scripts/*petty_cash*", "scripts/build_finance_*"] },
+    { "id": "accounting_lite", "label": "Cahaya Accounting", "files": ["modules/accounting_lite/*", "public/modules/accounting_lite/*", "public/accounting-lite.*", "scripts/*accounting*", "scripts/audit_inventory_balance.mjs", "scripts/normalize_account_segments_*", "scripts/repair_2026_account_code_collisions.mjs"] },
+    { "id": "asset_management", "label": "Aset Perusahaan", "files": ["modules/asset_management/*", "public/modules/asset_management/*", "public/assets.js", "sql/*", "rancangan_database_aset.md"] },
+    { "id": "maturity_reminders", "label": "Piutang (Pencairan & Piutang Jakarta)", "files": ["modules/maturity_reminders/*", "public/modules/maturity_reminders/*", "public/maturity-reminders.js", "public/jakarta-receivables.*", "public/piutang-*", "scripts/*jakarta*", "scripts/*maturity*"] },
+    { "id": "sinosure", "label": "Sinosure", "files": ["modules/sinosure/*", "public/modules/sinosure/*", "public/sinosure*", "scripts/*sinosure*", "docs/intent/wecom-wedrive-excel.md"] },
+    { "id": "wecom_excel", "label": "WeCom WeDrive Excel", "files": ["modules/wecom_excel/*", "public/modules/wecom_excel/*"] },
+    { "id": "whatsapp", "label": "WhatsApp Business (layanan pesan & log bersama)", "files": ["modules/whatsapp/*", "public/modules/whatsapp/*", "public/whatsapp-*", "scripts/*whatsapp*"] },
+    { "id": "server", "label": "ERP CAP", "files": ["modules/server/*", "public/modules/server/*"] }
+  ]
+}

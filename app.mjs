@@ -8,6 +8,7 @@ import { networkInterfaces } from 'node:os';
 import { spawnSync, spawn } from 'node:child_process';
 import { randomUUID, randomBytes, pbkdf2Sync, timingSafeEqual, createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
+import { createModuleRuntime, loadModules, moduleHeadTags, serveModuleAsset, handleModuleRequest, moduleRuntimeStatus } from './core/module-loader.mjs';
 
 const PORT = Number(process.env.PORT || 3000), ROOT = process.cwd(), PUBLIC = join(ROOT, 'public'), DATA = join(ROOT, 'data'), ERP_URL = process.env.ERP_URL || 'http://192.168.1.2/';
 let serverRestartScheduled = false;
@@ -3080,10 +3081,8 @@ function savePaymentLog(data) {
     let paymentLogId;
     if(existing){db.prepare('UPDATE payroll_payment_logs SET employee_count=?,monthly_total=?,daily_total=?,monthly_basic_total=?,allowance_total=?,premium_total=?,overtime_total=?,deduction_total=?,paid_total=?,needs_recalculation=0,created_at=CURRENT_TIMESTAMP WHERE id=?').run(employeeCount,monthly,daily,monthlyBasic,allowance,premium,overtime,deduction,paid,existing.id);paymentLogId=existing.id;}
     else paymentLogId=Number(db.prepare('INSERT INTO payroll_payment_logs (period_start,period_end,employee_count,monthly_total,daily_total,monthly_basic_total,allowance_total,premium_total,overtime_total,deduction_total,paid_total,payment_model) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)').run(start,end,employeeCount,monthly,daily,monthlyBasic,allowance,premium,overtime,deduction,paid,payment).lastInsertRowid);
-    const description=`Pembayaran gaji ${employeeCount} karyawan · periode ${start} s.d. ${end}`;
-    const pettyExisting=db.prepare('SELECT id FROM petty_cash_transactions WHERE payment_log_id=?').get(paymentLogId);
-    if(pettyExisting)db.prepare("UPDATE petty_cash_transactions SET transaction_date=?,category='gaji',other_category='',person_name='',source_number=?,description=?,amount=?,source_file='Log pembayaran gaji',updated_at=CURRENT_TIMESTAMP WHERE id=?").run(end,`PAYROLL-${paymentLogId}`,description,Math.round(paid),pettyExisting.id);
-    else db.prepare("INSERT INTO petty_cash_transactions (transaction_date,category,other_category,person_name,source_number,description,amount,source_file,payment_log_id) VALUES (?,'gaji','','',?,?,?,'Log pembayaran gaji',?)").run(end,`PAYROLL-${paymentLogId}`,description,Math.round(paid),paymentLogId);
+    // Gaji gudang tidak lagi menulis ke Kas Kecil (modul Keuangan). Pembayaran gaji
+    // dicatat di Kas Kecil oleh pengguna Keuangan; transaksi lama tetap tersimpan.
     db.exec('COMMIT');
   } catch(error) { db.exec('ROLLBACK');throw error; }
   return {...paymentLogData(),updated:Boolean(existing)};
@@ -3170,13 +3169,18 @@ itemInput=function(input,current={}){const item_code=String(input.item_code??cur
 // Buat pemetaan awal sekali saja. Setelah itu perubahan selalu berasal dari
 // Pengaturan rekening laporan dan tetap tersimpan di basis data.
 ensureAccountingReportMappings();
+// Kerangka modul: modul di modules/<id>/ dimuat setelah semua layanan inti siap.
+// Modul yang gagal dimuat dilewati tanpa menghentikan inti maupun modul lain.
+const moduleRuntime=createModuleRuntime();
+await loadModules(moduleRuntime,{root:ROOT,context:{db,ROOT,DATA,json,readJson,readBuffer,canAccess,isModuleEnabled,runPython}});
 createServer(async(req,res)=>{ const url=new URL(req.url,`http://${req.headers.host}`); try {
+  if(req.method==='GET'&&url.pathname.startsWith('/modules/')&&serveModuleAsset(moduleRuntime,{pathname:url.pathname,res,mime}))return;
   // Berkas antarmuka wajib selalu baru. Perhitungan gaji tidak boleh memakai
   // JavaScript lama setelah modul diperbarui, walaupun browser masih terbuka.
   if(req.method==='GET'&&['/','/index.html','/app.js','/styles.css','/responsive-layout.css','/assets.js','/maturity-reminders.js','/jakarta-receivables.js','/jakarta-receivables.css','/piutang-labels.js','/accounting-lite.js','/accounting-lite.css','/sinosure.js','/sinosure-deliveries.js','/sinosure-wecom.js','/sinosure-sync.js','/sinosure-menu.js'].includes(url.pathname)){
     const requested=url.pathname==='/'?'/index.html':url.pathname;
     let content=await readFile(join(PUBLIC,requested));
-    if(requested==='/index.html')content=Buffer.from(`${content.toString('utf8')}<link rel="stylesheet" href="/jakarta-receivables.css?v=5"><script src="/maturity-reminders.js?v=3"></script><script src="/piutang-whatsapp.js?v=1"></script><script src="/returns-manual.js?v=1"></script><script src="/jakarta-receivables.js?v=12"></script><script src="/piutang-labels.js?v=1"></script>`);
+    if(requested==='/index.html')content=Buffer.from(`${content.toString('utf8')}<link rel="stylesheet" href="/jakarta-receivables.css?v=5"><script src="/maturity-reminders.js?v=3"></script><script src="/piutang-whatsapp.js?v=1"></script><script src="/returns-manual.js?v=1"></script><script src="/jakarta-receivables.js?v=12"></script><script src="/piutang-labels.js?v=1"></script>${moduleHeadTags(moduleRuntime)}`);
     res.writeHead(200,{'Content-Type':mime[extname(requested)]||'application/octet-stream','Cache-Control':'no-store, no-cache, must-revalidate, max-age=0','Pragma':'no-cache'});
     return res.end(content);
   }
@@ -3187,6 +3191,8 @@ createServer(async(req,res)=>{ const url=new URL(req.url,`http://${req.headers.h
   if(url.pathname==='/api/auth/logout'&&req.method==='POST') { sessions.delete(String(req.headers['x-cap-token']||''));return json(res,200,{ok:true}); }
   const user=sessionUser(req,url);
   if(url.pathname.startsWith('/api/')&&!user)return json(res,401,{error:'Silakan masuk terlebih dahulu.'});
+  if(url.pathname==='/api/core/modules'&&req.method==='GET'){if(user.role!=='master')return json(res,403,{error:'Hanya akun master yang dapat melihat status modul.'});return json(res,200,moduleRuntimeStatus(moduleRuntime));}
+  if(await handleModuleRequest(moduleRuntime,{req,res,url,user,canAccess,json}))return;
   if(url.pathname==='/api/app-branding'&&req.method==='PUT'){if(user.role!=='master')return json(res,403,{error:'Hanya akun master yang dapat mengubah identitas aplikasi.'});return json(res,200,saveApplicationBranding(await readJson(req)));}
   if(url.pathname==='/api/app-branding/logo'&&req.method==='POST'){if(user.role!=='master')return json(res,403,{error:'Hanya akun master yang dapat mengubah logo aplikasi.'});return json(res,200,saveApplicationLogo(await readBuffer(req,2*1024*1024),req.headers['content-type']));}
   if(url.pathname==='/api/app-branding/logo'&&req.method==='DELETE'){if(user.role!=='master')return json(res,403,{error:'Hanya akun master yang dapat mengubah logo aplikasi.'});return json(res,200,clearApplicationLogo());}
