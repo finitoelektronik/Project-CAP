@@ -56,7 +56,15 @@ _Avoid_: menimpa data prospek saat impor, mengirim ke prospek yang sudah minta b
 
 **Template Prospek**:
 Pesan ke prospek dikirim sebagai template WhatsApp yang sudah disetujui Meta (nama, bahasa, opsional variabel {{1}} = nama kontak), per kota, setelah pengguna mengonfirmasi jumlah penerima. Setiap pengiriman dicatat beserta pengirim, kota, dan jumlah berhasil/gagal.
-_Avoid_: mengirim teks bebas sebagai pesan pertama ke prospek, mengirim massal tanpa konfirmasi jumlah penerima.
+_Avoid_: mengirim massal tanpa konfirmasi jumlah penerima.
+
+**Pesan Manual WhatsApp**:
+Teks bebas atau gambar JPG/PNG (maks. 5 MB, keterangan maks. 1.024 karakter) yang dikirim dari Pesan Internal maupun Pesan External. Penerima External dipilih per kota dan/atau dicentang satuan. Pemilik aplikasi menerima risiko aturan Meta: pesan bebas hanya sampai ke prospek yang membalas dalam 24 jam terakhir; sisanya dicatat gagal "di luar jendela 24 jam" dan perlu Template Prospek.
+_Avoid_: menganggap pesan manual pasti sampai ke semua prospek, mengirim gambar selain JPG/PNG.
+
+**Sisa Kuota WhatsApp**:
+Perkiraan sisa limit harian Meta = limit tier nomor bisnis (mis. TIER_250 = 250 penerima unik per 24 jam bergulir, dibaca dari Meta) dikurangi jumlah penerima unik yang berhasil dikirimi dari CAP dalam 24 jam terakhir (tabel whatsapp_message_log). Pesan yang dikirim di luar CAP tidak terhitung.
+_Avoid_: menyebut angka ini sebagai saldo/tagihan Meta, atau sebagai hitungan pasti dari Meta.
 
 ## Language
 
