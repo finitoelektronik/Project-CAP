@@ -62,6 +62,10 @@ _Avoid_: mengirim massal tanpa konfirmasi jumlah penerima.
 Teks bebas atau gambar JPG/PNG (maks. 5 MB, keterangan maks. 1.024 karakter) yang dikirim dari Pesan Internal maupun Pesan External. Penerima External dipilih per kota dan/atau dicentang satuan. Pemilik aplikasi menerima risiko aturan Meta: pesan bebas hanya sampai ke prospek yang membalas dalam 24 jam terakhir; sisanya dicatat gagal "di luar jendela 24 jam" dan perlu Template Prospek.
 _Avoid_: menganggap pesan manual pasti sampai ke semua prospek, mengirim gambar selain JPG/PNG.
 
+**Notifikasi WhatsApp Piutang**:
+Pengingat otomatis dari modul Piutang yang dikirim pada jam dan hari yang diatur pengguna modul Piutang (maks. 6 jam/hari, waktu server). Isi: Pencairan cek/giro/kospin berstatus menunggu dengan tanggal cair H-0 s.d. H-7, dan Piutang Jakarta bersisa yang lewat jatuh tempo atau jatuh tempo ≤ 7 hari. Penerima dipisah per jenis: kontak internal yang dicentang modul "Piutang — Pencairan cek/giro/kospin" dan/atau "Piutang — Piutang Jakarta". Pesan dikirim sebagai teks daftar; bila Meta menolak karena di luar jendela 24 jam, CAP mengirim template ringkasan cadangan (4 variabel: jenis, jumlah, total, tanggal). Tidak ada pesan bila tidak ada data. Setiap jadwal hanya dikirim sekali (slot tanggal+jam unik); jadwal yang terlambat lebih dari 60 menit atau sudah lewat saat pengaturan disimpan dilewati.
+_Avoid_: mengirim ulang slot yang sama setelah restart, mengirim pesan kosong, memakai tanggal UTC untuk H-0.
+
 **Sisa Kuota WhatsApp**:
 Perkiraan sisa limit harian Meta = limit tier nomor bisnis (mis. TIER_250 = 250 penerima unik per 24 jam bergulir, dibaca dari Meta) dikurangi jumlah penerima unik yang berhasil dikirimi dari CAP dalam 24 jam terakhir (tabel whatsapp_message_log). Pesan yang dikirim di luar CAP tidak terhitung.
 _Avoid_: menyebut angka ini sebagai saldo/tagihan Meta, atau sebagai hitungan pasti dari Meta.
