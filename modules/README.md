@@ -1,6 +1,6 @@
 # Modul CAP Analytics
 
-Setiap modul tinggal di folder `modules/<id>/` dan dimuat oleh inti (`core/module-loader.mjs`) saat server start.
+Setiap modul tinggal di folder `modules/<id>/` dan dimuat oleh inti (`modules/_core/module-loader.mjs`) saat server start.
 Folder yang diawali `_` (misalnya `_template`) atau `.` tidak dimuat.
 
 ```text

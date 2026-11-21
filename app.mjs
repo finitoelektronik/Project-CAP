@@ -8,7 +8,7 @@ import { networkInterfaces } from 'node:os';
 import { spawnSync, spawn } from 'node:child_process';
 import { randomUUID, randomBytes, pbkdf2Sync, timingSafeEqual, createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
-import { createModuleRuntime, loadModules, moduleHeadTags, serveModuleAsset, handleModuleRequest, moduleRuntimeStatus } from './core/module-loader.mjs';
+import { createModuleRuntime, loadModules, moduleHeadTags, serveModuleAsset, handleModuleRequest, moduleRuntimeStatus } from './modules/_core/module-loader.mjs';
 
 const PORT = Number(process.env.PORT || 3000), ROOT = process.cwd(), PUBLIC = join(ROOT, 'public'), DATA = join(ROOT, 'data'), ERP_URL = process.env.ERP_URL || 'http://192.168.1.2/';
 let serverRestartScheduled = false;

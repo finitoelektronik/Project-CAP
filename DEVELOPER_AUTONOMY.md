@@ -99,4 +99,4 @@ Berlaku sejak 21 November 2026. Rincian lengkap ada di `CLAUDE.md` dan wilayah b
 2. Setiap modul hanya menulis datanya sendiri; modul lain hanya membaca. WhatsApp Business adalah layanan pesan dan log bersama yang boleh dipanggil modul lain untuk mengirim pesan/pengingat.
 3. Gaji gudang tidak menulis ke Kas Kecil (modul Keuangan).
 4. Perbaikan data berupa migrasi sekali jalan, bukan kode yang berjalan setiap start.
-5. Paket modul hanya berisi berkas wilayah modulnya; modul baru ditempatkan di `modules/<id>/` dan dimuat oleh inti (`core/module-loader.mjs`).
+5. Paket modul hanya berisi berkas wilayah modulnya; modul baru ditempatkan di `modules/<id>/` dan dimuat oleh inti (`modules/_core/module-loader.mjs`).

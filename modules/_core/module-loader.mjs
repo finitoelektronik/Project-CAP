@@ -1,4 +1,6 @@
 // Pemuat modul CAP Analytics (inti).
+// Lokasi modules/_core/ dipakai karena Pemasang Modul hanya menerima target app.mjs,
+// CONTEXT.md, public/, scripts/, dan modules/. Folder berawalan "_" tidak dimuat sebagai modul.
 //
 // Setiap modul tinggal di modules/<id>/ dan terdiri dari:
 //   module.json      manifest: id, title, version, permission, frontend

@@ -28,7 +28,7 @@ Berkas bersama sementara (`app.mjs`, `public/app.js`, `CONTEXT.md`) boleh diedit
 
 ## 3. Kerangka modul (`modules/`)
 
-Modul baru atau modul yang dipindahkan tinggal di `modules/<id>/` (lihat `modules/README.md`). Inti memuatnya lewat `core/module-loader.mjs`. Modul tidak boleh mengimpor berkas modul lain; kebutuhan lintas modul memakai `ctx.services` dari inti.
+Modul baru atau modul yang dipindahkan tinggal di `modules/<id>/` (lihat `modules/README.md`). Inti memuatnya lewat `modules/_core/module-loader.mjs` (folder berawalan `_` milik inti dan tidak dimuat sebagai modul). Modul tidak boleh mengimpor berkas modul lain; kebutuhan lintas modul memakai `ctx.services` dari inti.
 
 ## 4. Larangan umum
 

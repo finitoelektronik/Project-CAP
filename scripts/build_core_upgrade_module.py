@@ -8,14 +8,29 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "1.0.17"
+VERSION = "1.0.19"
 PACKAGE_DIR = ROOT / "release" / f"package-cap-core-{VERSION}"
 OUTPUT = ROOT / "release" / f"CAP-Core-Update-{VERSION}.zip"
 FILES = (
     (ROOT / "app.mjs", "payload/app.mjs", "app.mjs"),
+    (ROOT / "modules" / "_core" / "module-loader.mjs", "payload/modules/_core/module-loader.mjs", "modules/_core/module-loader.mjs"),
+    (ROOT / "modules" / "README.md", "payload/modules/README.md", "modules/README.md"),
     (ROOT / "public" / "app.js", "payload/public/app.js", "public/app.js"),
-    (ROOT / "public" / "responsive-layout.css", "payload/public/responsive-layout.css", "public/responsive-layout.css"),
-    (ROOT / "scripts" / "Restart-CAP-Server-Admin.ps1", "payload/scripts/Restart-CAP-Server-Admin.ps1", "scripts/Restart-CAP-Server-Admin.ps1"),
+    (ROOT / "CONTEXT.md", "payload/CONTEXT.md", "CONTEXT.md"),
+)
+TITLE = "Kerangka modul inti & pemisahan Gaji-Kas Kecil"
+DESCRIPTION = (
+    "Tujuan: (1) kerangka pemuat modul inti - modul di modules/<id>/ (module.json, server.mjs, public/) dimuat saat start, "
+    "rute /api/modules/<id>/... dengan pemeriksaan login & hak akses oleh inti, aset /modules/<id>/..., registri layanan "
+    "antar-modul, modul yang gagal dimuat dilewati tanpa menghentikan inti/modul lain, status di /api/core/modules (master). "
+    "Saat ini belum ada modul yang dipindah, sehingga perilaku aplikasi tidak berubah. (2) Gaji gudang tidak lagi membuat "
+    "atau mengubah transaksi Kas Kecil saat log pembayaran gaji disimpan; transaksi Kas Kecil lama tetap tersimpan. "
+    "Berkas yang diganti: app.mjs, modules/_core/module-loader.mjs (baru), modules/README.md (baru), public/app.js, CONTEXT.md. "
+    "Migrasi database: tidak ada. Dampak pada data yang ada: tidak ada (diverifikasi: 25 API baca identik, struktur dan isi "
+    "116 tabel identik setelah start pada salinan database). app.mjs ini memuat backend semua fitur terbaru (WhatsApp 1.1.1, "
+    "Retur 1.0.1, Piutang Jakarta 1.0.19); pasang paket modul tersebut lebih dahulu bila belum, lalu paket inti ini terakhir. "
+    "Verifikasi: aplikasi terbuka normal, log pembayaran gaji tersimpan tanpa menambah Kas Kecil. "
+    "Rollback: gunakan pemulihan snapshot dari Pemasang Modul bila health check gagal."
 )
 
 
@@ -39,9 +54,9 @@ def main() -> None:
     manifest = {
         "format": "cap-module/v1",
         "id": "cap_core_update",
-        "title": "Jabatan akun dan tata letak responsif",
+        "title": TITLE,
         "version": VERSION,
-        "description": "Menambahkan jabatan pada akun pengguna yang dapat dikelola akun master serta tata letak responsif pada zoom 75%. Data pengguna, hak akses, dan kata sandi yang ada tetap dipertahankan; aplikasi hanya menambahkan kolom jabatan kosong bila belum tersedia.",
+        "description": DESCRIPTION,
         "permissions": ["cap_core_update"],
         "files": manifest_files,
         "migrations": [],
