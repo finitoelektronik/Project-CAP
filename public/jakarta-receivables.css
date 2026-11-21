@@ -59,3 +59,12 @@
 .modal .dialog-card .dialog-actions{position:sticky;bottom:-28px;background:#fff;padding:14px 0 0;margin-top:20px;border-top:1px solid #edf0f5}
 @media(max-width:1180px){#jakartaView .stats{grid-template-columns:repeat(3,minmax(0,1fr))}.jr-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:720px){#jakartaView header{display:block}#jakartaView .header-actions{justify-content:flex-start;margin-top:16px}.jr-filter-panel,#jakartaView .table-panel{padding:18px}.jr-filter-grid,#jakartaView .stats{grid-template-columns:1fr}.jr-filter-action .button{width:100%}#jakartaView .table-panel .panel-heading{display:block}#jakartaView .jr-table-tools{justify-content:space-between;margin-top:12px}#jakartaView .jr-invoice-search input{width:min(220px,66vw)}.modal{width:calc(100vw - 20px);max-height:calc(100vh - 20px)}.modal .dialog-card{padding:21px;max-height:calc(100vh - 20px)}.modal .dialog-card .dialog-actions{bottom:-21px}.modal .dialog-card .jr-item,.modal .dialog-card .jr-payment-allocation,.modal .dialog-card .jr-term-store,.modal .dialog-card .jr-class-store{grid-template-columns:1fr}.modal .dialog-card .text-button{width:100%}.modal .dialog-card .jr-payment-history>div{display:block}.modal .dialog-card .jr-payment-history>div>span:last-child{margin-top:10px}.modal .dialog-card .jr-payment-history small{white-space:normal}.jr-store-menu{max-height:190px}}
+
+/* Tombol tutup (x) dan Batal diselaraskan dengan dialog aplikasi: x abu-abu di kanan atas,
+   Batal bergaya tombol sekunder (bukan biru penuh). */
+.modal .dialog-card{position:relative}
+.modal .dialog-card .dialog-close{position:absolute;top:16px;right:16px;z-index:5;display:grid;place-items:center;width:34px;height:34px;padding:0;border:0;border-radius:8px;background:transparent;color:#78859a;font-family:inherit;font-size:27px;font-weight:400;line-height:1;cursor:pointer}
+.modal .dialog-card .dialog-close:hover,.modal .dialog-card .dialog-close:focus-visible{background:#f1f4f9;color:#18243a;outline:none}
+.modal .dialog-card>.eyebrow:first-of-type,.modal .dialog-card>h2{padding-right:44px}
+.modal .dialog-card .dialog-actions .button.secondary{background:#fff;color:#526077;border:1px solid #d5dfed}
+.modal .dialog-card .dialog-actions .button.secondary:hover{background:#f4f7fb}
