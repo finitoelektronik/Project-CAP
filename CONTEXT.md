@@ -46,6 +46,18 @@ _Avoid_: memuat seluruh kartu stok sebagai prasyarat laporan, menghitung sebelum
 Kelompok nomor penerima (mis. Internal, Supplier, Pelanggan) yang dikelola akun master. Satu nomor memiliki paling banyak satu klasifikasi dan tetap dapat menerima notifikasi dari beberapa modul. Pengiriman notifikasi dapat dibatasi pada satu klasifikasi; tanpa pilihan klasifikasi, semua kontak aktif pada modul tersebut menerima pesan. Klasifikasi yang masih dipakai tidak dapat dihapus, hanya dinonaktifkan.
 _Avoid_: menghapus kontak saat klasifikasinya dihapus, menyimpan klasifikasi sebagai teks bebas pada kontak.
 
+**Pesan Internal / Pesan External**:
+Modul WhatsApp Business memiliki dua submenu. Pesan Internal (hak `whatsapp`) adalah kontak dan notifikasi operasional karyawan. Pesan External (hak `whatsapp_external`, diberikan terpisah oleh master) adalah kontak prospek pelanggan, mis. "Prospek Finito Official Store - <Kota>", satu grup per kota.
+_Avoid_: mencampur kontak prospek ke tabel kontak internal, memberi akses prospek kepada semua pemegang hak WhatsApp.
+
+**Prospek WhatsApp**:
+Kontak external dengan nama apa adanya dari sumber (termasuk awalan "Finito Lead - "), kota dari grup, dan status Aktif atau Berhenti. Prospek berstatus Berhenti tidak pernah dikirimi pesan. Impor ulang hanya menambah nomor baru; nomor yang sudah ada tidak ditimpa agar edit di CAP tetap terjaga.
+_Avoid_: menimpa data prospek saat impor, mengirim ke prospek yang sudah minta berhenti.
+
+**Template Prospek**:
+Pesan ke prospek dikirim sebagai template WhatsApp yang sudah disetujui Meta (nama, bahasa, opsional variabel {{1}} = nama kontak), per kota, setelah pengguna mengonfirmasi jumlah penerima. Setiap pengiriman dicatat beserta pengirim, kota, dan jumlah berhasil/gagal.
+_Avoid_: mengirim teks bebas sebagai pesan pertama ke prospek, mengirim massal tanpa konfirmasi jumlah penerima.
+
 ## Language
 
 **Kontrak Sinosure**:
