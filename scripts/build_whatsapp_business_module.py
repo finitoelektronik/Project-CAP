@@ -11,7 +11,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 PACKAGE_DIR = ROOT / "release" / f"package-whatsapp-business-{VERSION}"
 OUTPUT = ROOT / "release" / f"CAP-WhatsApp-Business-Upgrade-{VERSION}.zip"
 TARGETS = (
@@ -31,7 +31,7 @@ DESCRIPTION = (
     "(hak akses baru whatsapp_external): daftar & edit prospek, status Aktif/Berhenti, impor VCF (nomor yang sudah ada dilewati), "
     "template Meta, kirim template per kota, pesan manual teks/gambar per kota atau kontak dicentang, dan riwayat pengiriman. "
     "(3) Panel sisa kuota 24 jam: tier dan kualitas nomor dari Meta dikurangi penerima unik dari CAP. "
-    "(4) Versi 1.1.0: notifikasi WhatsApp otomatis modul Piutang (pencairan cek/giro/kospin H-0 s.d. H-7 dan Piutang Jakarta "
+    "Versi 1.1.1: dibangun ulang dengan app.mjs terbaru (identik dengan paket Piutang Jakarta 1.0.19 dan Retur 1.0.1), tanpa perubahan fitur WhatsApp. (4) Sejak 1.1.0: notifikasi WhatsApp otomatis modul Piutang (pencairan cek/giro/kospin H-0 s.d. H-7 dan Piutang Jakarta "
     "lewat tempo/jatuh tempo <= 7 hari) pada jam dan hari yang diatur di modul Piutang, penerima dipisah per jenis, teks daftar "
     "dengan template ringkasan cadangan; bawaan NONAKTIF sampai diaktifkan pengguna. "
     "Berkas yang diganti: app.mjs, public/app.js, public/index.html, public/styles.css, public/whatsapp-external.js, "

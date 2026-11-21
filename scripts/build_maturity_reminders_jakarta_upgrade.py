@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "1.0.18"
+VERSION = "1.0.19"
 MODULE_ID = "maturity_reminders"
 RELEASE = ROOT / "release" / f"package-maturity-reminders-jakarta-upgrade-{VERSION}"
 ARCHIVE = ROOT / "release" / f"CAP-Maturity-Reminders-Piutang-Jakarta-Upgrade-{VERSION}.zip"
@@ -115,13 +115,13 @@ def main() -> None:
         "title": "Upgrade Piutang Jakarta",
         "version": VERSION,
         "description": (
-            "Versi 1.0.18 - Catat pembayaran Piutang Jakarta: nota dicari berdasarkan nama toko atau nomor invoice, "
+            "Versi 1.0.19 - (1) Tombol Batal dan x di semua dialog Piutang Jakarta menutup dialog tanpa menyimpan; tombol x di kanan atas dan Batal bergaya sekunder. (2) Lebih bayar dicatat beserta rinciannya pada catatan nota terakhir dan tampil di Rincian invoice (perubahan backend saveJakartaPayment). (3) Dari 1.0.18 - Catat pembayaran Piutang Jakarta: nota dicari berdasarkan nama toko atau nomor invoice, "
             "ringkasan total nota/nominal pembayaran/dialokasikan, nominal pembayaran baru yang dibagi berurutan dari nota "
             "pertama (nota terakhir dapat terbayar sebagian), konfirmasi bila ada nota tanpa alokasi, dan konfirmasi bila "
             "lebih bayar (kelebihan dicatat di catatan, tidak dialokasikan). Berkas yang diganti: public/jakarta-receivables.js "
             "(perubahan utama), app.mjs, public/maturity-reminders.js, public/jakarta-receivables.css, public/piutang-labels.js, "
-            "skrip Piutang Jakarta, CONTEXT.md. app.mjs identik dengan paket WhatsApp Business 1.1.0 dan Retur Input Resi "
-            "Manual 1.0.0. Migrasi: hanya 001-add-jakarta-store-master (idempoten, sudah ada sejak versi sebelumnya). Dampak "
+            "skrip Piutang Jakarta, CONTEXT.md. app.mjs identik dengan paket WhatsApp Business 1.1.1 dan Retur Input Resi "
+            "Manual 1.0.1, sehingga urutan pemasangan bebas. Migrasi: hanya 001-add-jakarta-store-master (idempoten, sudah ada sejak versi sebelumnya). Dampak "
             "pada data: tidak ada; pembayaran lama tetap. Verifikasi: Piutang > Piutang Jakarta > Terapkan > Catat pembayaran, "
             "cari nota, isi nominal, pastikan alokasi sesuai. Rollback: pemulihan snapshot dari Pemasang Modul."
         ),

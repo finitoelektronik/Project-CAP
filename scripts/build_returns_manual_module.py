@@ -6,7 +6,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 PACKAGE_DIR = ROOT / "release" / f"package-returns-manual-input-{VERSION}"
 OUTPUT = ROOT / "release" / f"CAP-Retur-Input-Resi-Manual-Upgrade-{VERSION}.zip"
 TARGETS = ("app.mjs", "public/returns-manual.js", "CONTEXT.md")
@@ -18,8 +18,8 @@ DESCRIPTION = (
     "Berkas yang diganti: app.mjs (endpoint POST /api/returns/incoming/manual dan pemuatan skrip), "
     "public/returns-manual.js (baru), CONTEXT.md. Migrasi database: tidak ada; memakai tabel return_incoming_shipments "
     "yang sudah ada. Dampak pada data yang ada: tidak ada. "
-    "Catatan: app.mjs adalah berkas inti bersama dan identik dengan app.mjs di paket WhatsApp Business 1.1.0, sehingga "
-    "urutan pemasangan kedua paket bebas; pasang juga paket WhatsApp Business 1.1.0 agar berkas tampilan WhatsApp/Piutang tersedia. "
+    "Catatan: app.mjs adalah berkas inti bersama dan identik dengan app.mjs di paket WhatsApp Business 1.1.1 dan Piutang Jakarta 1.0.19, sehingga "
+    "urutan pemasangan kedua paket bebas; pasang juga paket WhatsApp Business 1.1.1 agar berkas tampilan WhatsApp/Piutang tersedia. "
     "Verifikasi: buka Retur Online > Penerimaan retur, klik '+ Input resi manual', simpan satu resi uji, lalu pastikan "
     "resi tampil di daftar dengan jasa kirim yang benar. Rollback: gunakan pemulihan snapshot dari Pemasang Modul bila "
     "health check gagal."
