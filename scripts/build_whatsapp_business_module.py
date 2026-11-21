@@ -11,7 +11,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 PACKAGE_DIR = ROOT / "release" / f"package-whatsapp-business-{VERSION}"
 OUTPUT = ROOT / "release" / f"CAP-WhatsApp-Business-Upgrade-{VERSION}.zip"
 TARGETS = (
@@ -20,6 +20,7 @@ TARGETS = (
     "public/index.html",
     "public/styles.css",
     "public/whatsapp-external.js",
+    "public/piutang-whatsapp.js",
     "scripts/import_whatsapp_external_vcf.mjs",
     "CONTEXT.md",
 )
@@ -30,10 +31,14 @@ DESCRIPTION = (
     "(hak akses baru whatsapp_external): daftar & edit prospek, status Aktif/Berhenti, impor VCF (nomor yang sudah ada dilewati), "
     "template Meta, kirim template per kota, pesan manual teks/gambar per kota atau kontak dicentang, dan riwayat pengiriman. "
     "(3) Panel sisa kuota 24 jam: tier dan kualitas nomor dari Meta dikurangi penerima unik dari CAP. "
-    "Berkas yang diganti: app.mjs, public/app.js, public/index.html, public/styles.css, public/whatsapp-external.js (baru), "
-    "scripts/import_whatsapp_external_vcf.mjs (baru), CONTEXT.md. "
+    "(4) Versi 1.1.0: notifikasi WhatsApp otomatis modul Piutang (pencairan cek/giro/kospin H-0 s.d. H-7 dan Piutang Jakarta "
+    "lewat tempo/jatuh tempo <= 7 hari) pada jam dan hari yang diatur di modul Piutang, penerima dipisah per jenis, teks daftar "
+    "dengan template ringkasan cadangan; bawaan NONAKTIF sampai diaktifkan pengguna. "
+    "Berkas yang diganti: app.mjs, public/app.js, public/index.html, public/styles.css, public/whatsapp-external.js, "
+    "public/piutang-whatsapp.js (baru), scripts/import_whatsapp_external_vcf.mjs, CONTEXT.md. "
     "Perubahan database (dibuat otomatis oleh app.mjs saat start, hanya aditif): tabel whatsapp_classifications, "
-    "whatsapp_external_contacts, whatsapp_external_sends, whatsapp_message_log; kolom whatsapp_contacts.classification_id, "
+    "whatsapp_external_contacts, whatsapp_external_sends, whatsapp_message_log, piutang_whatsapp_settings, "
+    "piutang_whatsapp_runs; kolom whatsapp_contacts.classification_id, "
     "whatsapp_settings.external_template_name/external_template_language/external_template_param, whatsapp_external_sends.kind. "
     "Migrasi SQL paket: tidak ada. Dampak pada data yang ada: kontak, token, dan pengaturan WhatsApp lama tetap; kontak lama "
     "tanpa klasifikasi. Data prospek TIDAK ikut paket: impor lewat Pesan External > Impor VCF. "
@@ -64,7 +69,7 @@ def main() -> None:
     manifest = {
         "format": "cap-module/v1",
         "id": "whatsapp_business",
-        "title": "WhatsApp Business — Pesan Internal & External",
+        "title": "WhatsApp Business - Pesan Internal, External & Notifikasi Piutang",
         "version": VERSION,
         "description": DESCRIPTION,
         "permissions": ["whatsapp", "whatsapp_external"],
