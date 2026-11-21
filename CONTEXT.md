@@ -40,6 +40,12 @@ _Avoid_: membuat baris nominal nol, melunasi hutang supplier secara otomatis pad
 Perhitungan laporan HPP dilakukan sesudah pengguna menekan Terapkan melalui agregasi rekening dan snapshot persediaan periode yang diperlukan; seluruh kartu stok per barang tidak dimuat ke layar.
 _Avoid_: memuat seluruh kartu stok sebagai prasyarat laporan, menghitung sebelum periode diterapkan.
 
+## Retur Online
+
+**Input Resi Retur Manual**:
+Penerimaan retur dapat dicatat tanpa impor CSV: pengguna mengetik atau men-scan satu atau banyak nomor resi (satu per baris) dengan tanggal masuk dan jasa kirim (otomatis dari pola nomor resi bila tidak dipilih). Sumber dicatat "Input manual · <pengguna>". Nomor resi yang sudah tersimpan tidak ditimpa dan ditampilkan sebagai duplikat beserta tanggal masuk lamanya.
+_Avoid_: menimpa tanggal masuk resi yang sudah ada, menyimpan nomor resi berisi karakter selain huruf, angka, dan tanda minus.
+
 ## Notifikasi WhatsApp
 
 **Klasifikasi Nomor WhatsApp**:
