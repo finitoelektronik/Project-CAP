@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "1.0.17"
+VERSION = "1.0.18"
 MODULE_ID = "maturity_reminders"
 RELEASE = ROOT / "release" / f"package-maturity-reminders-jakarta-upgrade-{VERSION}"
 ARCHIVE = ROOT / "release" / f"CAP-Maturity-Reminders-Piutang-Jakarta-Upgrade-{VERSION}.zip"
@@ -114,7 +114,17 @@ def main() -> None:
         "id": MODULE_ID,
         "title": "Upgrade Piutang Jakarta",
         "version": VERSION,
-        "description": "Menambah pencarian nomor invoice pada Piutang Jakarta serta menampilkan tanggal invoice, jatuh tempo, dan umur piutang; invoice lunas bernilai 0.",
+        "description": (
+            "Versi 1.0.18 - Catat pembayaran Piutang Jakarta: nota dicari berdasarkan nama toko atau nomor invoice, "
+            "ringkasan total nota/nominal pembayaran/dialokasikan, nominal pembayaran baru yang dibagi berurutan dari nota "
+            "pertama (nota terakhir dapat terbayar sebagian), konfirmasi bila ada nota tanpa alokasi, dan konfirmasi bila "
+            "lebih bayar (kelebihan dicatat di catatan, tidak dialokasikan). Berkas yang diganti: public/jakarta-receivables.js "
+            "(perubahan utama), app.mjs, public/maturity-reminders.js, public/jakarta-receivables.css, public/piutang-labels.js, "
+            "skrip Piutang Jakarta, CONTEXT.md. app.mjs identik dengan paket WhatsApp Business 1.1.0 dan Retur Input Resi "
+            "Manual 1.0.0. Migrasi: hanya 001-add-jakarta-store-master (idempoten, sudah ada sejak versi sebelumnya). Dampak "
+            "pada data: tidak ada; pembayaran lama tetap. Verifikasi: Piutang > Piutang Jakarta > Terapkan > Catat pembayaran, "
+            "cari nota, isi nominal, pastikan alokasi sesuai. Rollback: pemulihan snapshot dari Pemasang Modul."
+        ),
         "permissions": ["maturity_reminders"],
         "files": files,
         "migrations": [migration_item],
